@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="rahcomm",
-    version="0.0.0",
+    version="0.0.1",
     description="RAH Communication Tool for FPGA data communication on Vaaman.",
     author="Shail Parmar",
     author_email="shailparmar26@gmail.com.com",
