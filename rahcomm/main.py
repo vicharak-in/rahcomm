@@ -3,6 +3,9 @@
 import pyrah
 import threading
 import argparse
+import readline
+import os
+import atexit
 
 parser = argparse.ArgumentParser(description="RAH Communication Tool")
 parser.add_argument("--appid", type=int, default=3, help="Application ID (default: 3)")
@@ -11,10 +14,25 @@ args = parser.parse_args()
 APP_ID = args.appid
 DATA_LENGTH = 6
 
+home_dir = os.path.expanduser('~')
+history_file = os.path.join(home_dir, '.rahcomm.hist')
+
+if not os.path.exists(history_file):
+    with open(history_file, 'a') as f:
+        pass
+
+readline.parse_and_bind('set editing-mode vi')
+readline.read_history_file(history_file)
+
+atexit.register(readline.write_history_file, history_file)
+
 def rah_writer():
     try:
+        history = []
         while True:
             user_input = input("RAH WRITE: ")
+            history.append(user_input)
+
             try:
                 hex_values = [int(value, 16) for value in user_input.split()]
                 pyrah.rah_write(APP_ID, bytes(hex_values))
@@ -53,4 +71,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
