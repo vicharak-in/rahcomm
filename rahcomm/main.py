@@ -24,22 +24,29 @@ if not os.path.exists(history_file):
 readline.parse_and_bind('set editing-mode vi')
 readline.read_history_file(history_file)
 
-atexit.register(readline.write_history_file, history_file)
+history = []
+
+def save_history():
+    with open(history_file, 'a') as f:
+        for entry in history:
+            f.write(entry + '\n')
+
+atexit.register(save_history)
 
 def rah_writer():
     try:
-        history = []
         while True:
             user_input = input("RAH WRITE: ")
-            history.append(user_input)
 
             try:
                 hex_values = [int(value, 16) for value in user_input.split()]
                 pyrah.rah_write(APP_ID, bytes(hex_values))
             except ValueError:
                 print("Invalid input.")
+            else:
+                history.append(user_input)
     except Exception as error:
-        print(f"Write Error: {error}")
+        print(f"\nWrite Error: {error}")
 
 def rah_reader():
     try:
