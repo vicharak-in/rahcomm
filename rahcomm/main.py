@@ -45,6 +45,8 @@ def rah_writer():
                 print("Invalid input.")
             else:
                 history.append(user_input)
+    except EOFError:
+        pass
     except Exception as error:
         print(f"\nWrite Error: {error}")
 
@@ -68,9 +70,9 @@ def main():
         
         read_thread.start()
         write_thread.start()
-        
-        read_thread.join()
+
         write_thread.join()
+        read_thread.join(0)
     except KeyboardInterrupt:
         print("\nClosing application...")
     except Exception as error:
